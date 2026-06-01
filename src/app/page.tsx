@@ -164,7 +164,7 @@ export default async function Home() {
         <div className="mt-12">
           <div className="sec-label mb-2">// CORE VALUES</div>
           <h3 className="sec-title mb-6" style={{ fontSize: "1.5rem" }}>What we believe in</h3>
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="grid lg:grid-cols-2 gap-7 lg:gap-12">
             <div>
               <ul className="space-y-3 list-none p-0">
                 {[
@@ -317,7 +317,7 @@ export default async function Home() {
         {/* ───── CTA ───── */}
         <SectionDivider />
         <div
-          className="rounded-[18px] p-10 md:p-14 text-center mb-20"
+          className="rounded-[18px] p-7 md:p-14 text-center mb-10 md:mb-20"
           style={{
             background: "linear-gradient(135deg, rgba(232,67,147,.07), rgba(168,85,247,.07))",
             border: "1px solid rgba(232,67,147,.2)",

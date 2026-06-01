@@ -60,7 +60,7 @@ export default async function AboutPage() {
 
         <div className="sec-label mb-2">// CORE VALUES</div>
         <h3 className="sec-title mb-6" style={{ fontSize: "1.5rem" }}>What we believe in</h3>
-        <div className="grid lg:grid-cols-2 gap-12 mb-12">
+        <div className="grid lg:grid-cols-2 gap-7 lg:gap-12 mb-8 md:mb-12">
           <div>
             <ul className="space-y-3 list-none p-0">
               {VALUES.map((v) => (

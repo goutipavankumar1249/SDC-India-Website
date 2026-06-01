@@ -17,7 +17,7 @@ export default function ContactPage() {
         <h1 className="sec-title">Let&apos;s connect</h1>
         <p className="sec-sub mb-10">Have questions, collaboration ideas, or speaker proposals? Reach out and we&apos;ll connect quickly.</p>
 
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="grid lg:grid-cols-2 gap-7 lg:gap-12">
           <div>
             <div className="text-[.7rem] mb-4 font-bold uppercase tracking-widest" style={{ color: "var(--muted)" }}>
               Reach us on

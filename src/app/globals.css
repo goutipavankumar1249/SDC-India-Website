@@ -134,7 +134,8 @@ input, select, textarea, button {
 .hdivider {
   height: 1px;
   background: var(--border);
-  margin: 4rem 0;
+  /* 1.75rem on mobile → up to 4rem on large screens (smooth scaling) */
+  margin: clamp(1.75rem, 6vw, 4rem) 0;
 }
 
 .pulse {
