@@ -1,14 +1,19 @@
 import Link from "next/link";
 import Image from "next/image";
-import { EVENTS } from "@/data/events";
-import { HIGHLIGHTS } from "@/data/highlights";
-import { FOUNDER, CORE_TEAM } from "@/data/team";
-import { aboutPageContent, partnerLogosStub } from "@/data/about";
+import { publicListEvents } from "@/admin/lib/data/events";
+import { publicListHighlights } from "@/admin/lib/data/highlights";
+import { publicListTeam } from "@/admin/lib/data/team";
+import { publicListPartners } from "@/admin/lib/data/partners";
+import { mapRowsToEvents } from "@/lib/mappers/events";
+import { mapRowToHighlight } from "@/lib/mappers/highlights";
+import { mapRowToTeamMember } from "@/lib/mappers/team";
 import HeroSlideshow from "@/components/HeroSlideshow";
 import EventCard from "@/components/cards/EventCard";
 import TeamCard from "@/components/cards/TeamCard";
 import HighlightCard from "@/components/cards/HighlightCard";
 import PartnerCard from "@/components/cards/PartnerCard";
+
+export const revalidate = 60;
 
 const HERO_STATS = [
   { value: "2500+", label: "MEMBERS" },
@@ -18,12 +23,24 @@ const HERO_STATS = [
   { value: "2022",  label: "SINCE" },
 ];
 
-const HOME_TEAM_PREVIEW = [FOUNDER[0], ...CORE_TEAM.slice(0, 3)].filter(Boolean);
+export default async function Home() {
+  const [upcomingRows, pastRows, highlightRows, teamRows, partnerRows] = await Promise.all([
+    publicListEvents({ filter: "upcoming" }),
+    publicListEvents({ filter: "past" }),
+    publicListHighlights(),
+    publicListTeam(),
+    publicListPartners(),
+  ]);
 
-export default function Home() {
-  const recentPast = EVENTS.filter((e) => e.isPast).slice(0, 3);
-  const upcoming = EVENTS.find((e) => !e.isPast);
-  const homeHighlights = HIGHLIGHTS.slice(0, 3);
+  const upcoming  = upcomingRows[0];                         // raw row (we need row.id for RegisterButton)
+  const recentPast = mapRowsToEvents(pastRows.slice(0, 3));
+  const homeHighlights = highlightRows.slice(0, 3).map(mapRowToHighlight);
+
+  // Team preview: founder + first 3 contributors
+  const teamMembers = teamRows.map(mapRowToTeamMember);
+  const founder = teamMembers.find((m) => m.section === "Founder");
+  const core    = teamMembers.filter((m) => m.section !== "Founder").slice(0, 3);
+  const HOME_TEAM_PREVIEW = [founder, ...core].filter((m): m is NonNullable<typeof founder> => Boolean(m));
 
   return (
     <main className="overflow-x-hidden">
@@ -38,7 +55,7 @@ export default function Home() {
               border: "1px solid rgba(232,67,147,.35)",
               background: "rgba(232,67,147,.08)",
               color: "var(--a1)",
-              fontFamily: "Space Mono, monospace",
+              fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
             }}
           >
             <span className="pulse" />
@@ -48,7 +65,7 @@ export default function Home() {
           <h1
             className="font-extrabold leading-[1] mb-6"
             style={{
-              fontFamily: "Syne, sans-serif",
+              fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
               fontSize: "clamp(3rem, 8vw, 6.5rem)",
               letterSpacing: "-.03em",
             }}
@@ -73,7 +90,7 @@ export default function Home() {
               <div key={s.label} className="text-center">
                 <div
                   className="gtext font-extrabold text-[2.1rem] leading-none"
-                  style={{ fontFamily: "Syne, sans-serif" }}
+                  style={{ fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}
                 >
                   {s.value}
                 </div>
@@ -86,7 +103,7 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="max-w-[1100px] mx-auto px-6">
+      <div className="max-w-[1280px] mx-auto px-6">
 
         {/* ───── ABOUT ───── */}
         <SectionDivider />
@@ -106,19 +123,14 @@ export default function Home() {
           ].map((card) => (
             <div key={card.title} className="rounded-[14px] p-6" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
               <div className="text-[1.8rem] mb-3">{card.icon}</div>
-              <div className="font-bold text-[.93rem] mb-1.5" style={{ fontFamily: "Syne, sans-serif" }}>{card.title}</div>
+              <div className="font-bold text-[.93rem] mb-1.5" style={{ fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>{card.title}</div>
               <p className="text-[.8rem] leading-[1.6]" style={{ color: "var(--sub)" }}>{card.desc}</p>
             </div>
           ))}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 mt-10">
-          <DetailCard icon="🎯" title="Our Mission" body={aboutPageContent.mission} />
-          <DetailCard icon="👁"  title="Our Vision"  body={aboutPageContent.vision} />
-        </div>
-
-        <div className="rounded-[16px] p-8 mt-6" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
-          <h3 className="font-extrabold text-xl mb-3" style={{ fontFamily: "Syne, sans-serif" }}>Founding Story</h3>
+        <div className="rounded-[16px] p-8 mt-2" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
+          <h3 className="font-extrabold text-xl mb-3" style={{ fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>Founding Story</h3>
           <p className="text-[.92rem] leading-[1.85]" style={{ color: "var(--sub)" }}>
             The <strong style={{ color: "var(--text)" }}>Student Developers Community (SDC)</strong> was established in <strong style={{ color: "var(--text)" }}>2022 at SNIST</strong>, founded by <strong style={{ color: "var(--text)" }}>Mr. Chandrashekhar M</strong> — a SNIST alumnus from the 2021–2024 batch.
           </p>
@@ -139,8 +151,8 @@ export default function Home() {
               { value: "2500+", label: "COMMUNITY MEMBERS" },
             ].map((s) => (
               <div key={s.label} className="rounded-[14px] p-6 text-center" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
-                <div className="gtext font-extrabold text-[2.4rem]" style={{ fontFamily: "Syne, sans-serif" }}>{s.value}</div>
-                <div className="text-[.72rem] mt-1.5" style={{ color: "var(--muted)", fontFamily: "Space Mono, monospace" }}>
+                <div className="gtext font-extrabold text-[2.4rem]" style={{ fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>{s.value}</div>
+                <div className="text-[.72rem] mt-1.5" style={{ color: "var(--muted)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
                   {s.label}
                 </div>
               </div>
@@ -164,21 +176,21 @@ export default function Home() {
                   "Community-driven growth and student leadership",
                 ].map((v) => (
                   <li key={v} className="flex gap-3 text-[.9rem] leading-[1.65]" style={{ color: "var(--sub)" }}>
-                    <span className="shrink-0" style={{ color: "var(--a1)", fontFamily: "Space Mono, monospace" }}>→</span>
+                    <span className="shrink-0" style={{ color: "var(--a1)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>→</span>
                     {v}
                   </li>
                 ))}
               </ul>
               <div className="flex flex-wrap gap-2 mt-7">
                 {["Web Development", "AI / ML", "UI / UX Design", "Blockchain / Web3", "Backend Dev", "Data Science", "Hackathons", "Open Source"].map((t) => (
-                  <span key={t} className="px-3 py-1 rounded-full text-[.7rem]" style={{ border: "1px solid var(--border2)", color: "var(--sub)", fontFamily: "Space Mono, monospace" }}>
+                  <span key={t} className="px-3 py-1 rounded-full text-[.7rem]" style={{ border: "1px solid var(--border2)", color: "var(--sub)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
                     {t}
                   </span>
                 ))}
               </div>
             </div>
             <div>
-              <div className="text-[.65rem] mb-3 tracking-widest" style={{ color: "var(--sub)", fontFamily: "Space Mono, monospace" }}>📸 COMMUNITY GALLERY</div>
+              <div className="text-[.65rem] mb-3 tracking-widest" style={{ color: "var(--sub)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>📸 COMMUNITY GALLERY</div>
               <div className="grid grid-cols-3 gap-2.5">
                 <GalleryTile src="/assets/blog/event.jpeg"       alt="SDC Event"    span="col-span-2 aspect-[2/1]" />
                 <GalleryTile src="/assets/blog/snist.jpeg"       alt="SNIST Campus" span="aspect-square" />
@@ -186,7 +198,7 @@ export default function Home() {
                 <GalleryTile src="/assets/blog/community-2.jpeg" alt="Members"      span="aspect-square" />
                 <GalleryTile src="/assets/blog/community-3.jpeg" alt="Team"         span="aspect-square" />
               </div>
-              <p className="text-[.67rem] mt-2" style={{ color: "var(--muted)", fontFamily: "Space Mono, monospace" }}>
+              <p className="text-[.67rem] mt-2" style={{ color: "var(--muted)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
                 Moments from SDC events · 2022 — 2025
               </p>
             </div>
@@ -212,17 +224,17 @@ export default function Home() {
             <div>
               <div
                 className="inline-block px-3 py-1 rounded-full text-[.67rem] mb-2.5"
-                style={{ background: "rgba(34,197,94,.1)", color: "#22c55e", fontFamily: "Space Mono, monospace" }}
+                style={{ background: "rgba(34,197,94,.1)", color: "#22c55e", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}
               >
                 🟢 OPENING SOON
               </div>
-              <div className="font-extrabold text-[1.7rem]" style={{ fontFamily: "Syne, sans-serif" }}>
+              <div className="font-extrabold text-[1.7rem]" style={{ fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
                 {upcoming.title} 🏆
               </div>
               <p className="text-[.86rem] mt-1.5 max-w-md" style={{ color: "var(--sub)" }}>{upcoming.description}</p>
               <div className="flex gap-4 flex-wrap mt-3 text-[.73rem]" style={{ color: "var(--muted)" }}>
-                <span>📅 Date TBA</span>
-                <span>📍 {upcoming.location}</span>
+                <span>📅 {upcoming.event_date ?? "Date TBA"}</span>
+                <span>📍 {upcoming.location ?? "TBA"}</span>
                 <span>👥 {upcoming.seats ?? 300} Seats</span>
                 <span>🏆 National Level</span>
               </div>
@@ -230,14 +242,14 @@ export default function Home() {
             <div className="text-center">
               <div
                 className="inline-block gtext font-extrabold text-[1.2rem] px-4 py-1.5 rounded-lg mb-3"
-                style={{ fontFamily: "Syne, sans-serif", border: "1px solid rgba(232,67,147,.25)", letterSpacing: ".05em" }}
+                style={{ fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif", border: "1px solid rgba(232,67,147,.25)", letterSpacing: ".05em" }}
               >
                 DATE · TBA
               </div>
-              <div className="text-[.7rem] mb-3" style={{ color: "var(--muted)", fontFamily: "Space Mono, monospace" }}>
+              <div className="text-[.7rem] mb-3" style={{ color: "var(--muted)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
                 REGISTRATIONS OPENING SOON
               </div>
-              <Link href={`/events/${upcoming.id}`} className="btn-grad" style={{ fontSize: ".8rem", padding: ".58rem 1.35rem" }}>
+              <Link href={`/events/${upcoming.slug ?? upcoming.id}`} className="btn-grad" style={{ fontSize: ".8rem", padding: ".58rem 1.35rem" }}>
                 View Details →
               </Link>
             </div>
@@ -297,8 +309,8 @@ export default function Home() {
           sub="National communities and industry organizations that have hosted, sponsored, or partnered with SDC events."
         />
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-          {partnerLogosStub.map((p, i) => (
-            <PartnerCard key={p.alt} src={`/assets/partners/${p.src.split("/").pop()}`} alt={p.alt} index={i} />
+          {partnerRows.map((p, i) => (
+            <PartnerCard key={p.id} src={p.logo_url} alt={p.name} index={i} />
           ))}
         </div>
 
@@ -311,10 +323,10 @@ export default function Home() {
             border: "1px solid rgba(232,67,147,.2)",
           }}
         >
-          <div className="text-[.67rem] tracking-widest mb-2" style={{ color: "var(--a1)", fontFamily: "Space Mono, monospace" }}>
+          <div className="text-[.67rem] tracking-widest mb-2" style={{ color: "var(--a1)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
             // JOIN US
           </div>
-          <h3 className="font-extrabold text-[2rem] md:text-[2.5rem] mb-3" style={{ fontFamily: "Syne, sans-serif" }}>
+          <h3 className="font-extrabold text-[2rem] md:text-[2.5rem] mb-3" style={{ fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
             Ready to <span className="gtext">build something</span> together?
           </h3>
           <p className="max-w-xl mx-auto text-base mb-6" style={{ color: "var(--sub)" }}>
@@ -364,15 +376,6 @@ function SectionHeader({
   );
 }
 
-function DetailCard({ icon, title, body }: { icon: string; title: string; body: string }) {
-  return (
-    <div className="rounded-[16px] p-7" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
-      <div className="text-[1.8rem] mb-3">{icon}</div>
-      <h3 className="font-extrabold text-lg mb-2.5" style={{ fontFamily: "Syne, sans-serif" }}>{title}</h3>
-      <p className="text-[.88rem] leading-[1.75]" style={{ color: "var(--sub)" }}>{body}</p>
-    </div>
-  );
-}
 
 function GalleryTile({ src, alt, span }: { src: string; alt: string; span: string }) {
   return (

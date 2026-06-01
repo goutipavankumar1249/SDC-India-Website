@@ -1,4 +1,4 @@
-export type BlogCategory = "article" | "event" | "growth" | "community" | "digital";
+export type BlogCategory = "article" | "event" | "growth" | "community" | "digital" | "tutorial" | "announcement";
 
 export type BlogContentBlock = {
   title?: string;

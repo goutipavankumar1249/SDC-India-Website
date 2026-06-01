@@ -1,16 +1,16 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { blogPostsStub } from "@/data/blog";
+import { publicGetBlogPostBySlug } from "@/admin/lib/data/blog";
+import { mapRowToBlogPost } from "@/lib/mappers/blog";
 
-export async function generateStaticParams() {
-  return blogPostsStub.map((p) => ({ id: p.id }));
-}
+export const revalidate = 60;
 
 export default async function BlogDetail({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const post = blogPostsStub.find((p) => p.id === id);
-  if (!post) return notFound();
+  const { id: slug } = await params;
+  const row = await publicGetBlogPostBySlug(slug);
+  if (!row) return notFound();
+  const post = mapRowToBlogPost(row);
 
   return (
     <main className="pt-24 pb-20">
@@ -19,13 +19,13 @@ export default async function BlogDetail({ params }: { params: Promise<{ id: str
         <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(8,8,8,.95) 0%, rgba(8,8,8,.5) 60%, rgba(8,8,8,.3) 100%)" }} />
         <div className="absolute inset-0 flex items-end">
           <div className="max-w-[820px] mx-auto w-full px-6 pb-10">
-            <Link href="/blog" className="inline-block text-[.78rem] mb-4 transition-colors hover:text-white" style={{ color: "var(--sub)", fontFamily: "Space Mono, monospace" }}>
+            <Link href="/blog" className="inline-block text-[.78rem] mb-4 transition-colors hover:text-white" style={{ color: "var(--sub)" }}>
               ← Back to blog
             </Link>
-            <span className="inline-block px-3 py-1 rounded-full text-[.65rem] mb-3 uppercase tracking-wider" style={{ background: "rgba(168,85,247,.18)", color: "var(--a3)", fontFamily: "Space Mono, monospace" }}>
+            <span className="inline-block px-3 py-1 rounded-full text-[.65rem] mb-3 uppercase tracking-wider" style={{ background: "rgba(168,85,247,.18)", color: "var(--a3)" }}>
               {post.category}
             </span>
-            <h1 className="font-extrabold text-3xl md:text-5xl leading-tight" style={{ fontFamily: "Syne, sans-serif", letterSpacing: "-.02em" }}>{post.title}</h1>
+            <h1 className="font-extrabold text-3xl md:text-5xl leading-tight" style={{ letterSpacing: "-.02em" }}>{post.title}</h1>
             <div className="flex gap-4 mt-3 text-sm" style={{ color: "var(--sub)" }}>
               <span>📅 {post.date}</span>
               <span>⏱ {post.readTime}</span>
@@ -40,18 +40,18 @@ export default async function BlogDetail({ params }: { params: Promise<{ id: str
         {post.content.map((section, idx) => (
           <section key={idx} className="mb-8">
             {section.title && (
-              <h2 className="font-extrabold text-xl mt-8 mb-3" style={{ fontFamily: "Syne, sans-serif", color: "var(--text)" }}>
+              <h2 className="font-extrabold text-xl mt-8 mb-3" style={{ color: "var(--text)" }}>
                 {section.title}
               </h2>
             )}
             {section.paragraphs?.map((p, i) => (
               <p key={i} className="text-base leading-[1.85] mb-4" style={{ color: "var(--sub)" }}>{p}</p>
             ))}
-            {section.bullets && (
+            {section.bullets && section.bullets.length > 0 && (
               <ul className="space-y-2.5 list-none p-0 mb-4">
                 {section.bullets.map((b) => (
                   <li key={b} className="flex gap-3 text-base leading-relaxed" style={{ color: "var(--sub)" }}>
-                    <span style={{ color: "var(--a1)", fontFamily: "Space Mono, monospace" }}>→</span>
+                    <span style={{ color: "var(--a1)" }}>→</span>
                     {b}
                   </li>
                 ))}

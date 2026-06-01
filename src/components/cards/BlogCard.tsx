@@ -42,15 +42,15 @@ export default function BlogCard({
           <div className="p-8 flex flex-col gap-3 justify-center">
             <span
               className="inline-block px-[.7rem] py-[.22rem] rounded-full text-[.6rem] font-mono uppercase tracking-wider w-fit"
-              style={{ background: style.bg, color: style.color, fontFamily: "Space Mono, monospace" }}
+              style={{ background: style.bg, color: style.color, fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}
             >
               ★ Featured · {post.category}
             </span>
-            <h2 className="font-extrabold text-[1.55rem] leading-tight" style={{ fontFamily: "Syne, sans-serif", color: "var(--text)" }}>
+            <h2 className="font-extrabold text-[1.55rem] leading-tight" style={{ fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif", color: "var(--text)" }}>
               {post.title}
             </h2>
             <p className="text-sm leading-[1.7]" style={{ color: "var(--sub)" }}>{post.excerpt}</p>
-            <div className="flex gap-[.8rem] text-[.66rem] font-mono mt-1" style={{ color: "var(--muted)", fontFamily: "Space Mono, monospace" }}>
+            <div className="flex gap-[.8rem] text-[.66rem] font-mono mt-1" style={{ color: "var(--muted)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
               <span>📅 {post.date}</span>
               <span>⏱ {post.readTime}</span>
             </div>
@@ -80,13 +80,13 @@ export default function BlogCard({
         <div className="p-[1.2rem_1.3rem_1.4rem] flex flex-col gap-2">
           <span
             className="inline-block px-[.7rem] py-[.22rem] rounded-full text-[.6rem] font-mono uppercase tracking-wider w-fit"
-            style={{ background: style.bg, color: style.color, fontFamily: "Space Mono, monospace" }}
+            style={{ background: style.bg, color: style.color, fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}
           >
             {post.category}
           </span>
-          <h3 className="font-bold text-base leading-tight" style={{ fontFamily: "Syne, sans-serif", color: "var(--text)" }}>{post.title}</h3>
+          <h3 className="font-bold text-base leading-tight" style={{ fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif", color: "var(--text)" }}>{post.title}</h3>
           <p className="text-[.8rem] leading-[1.6] line-clamp-3" style={{ color: "var(--sub)" }}>{post.excerpt}</p>
-          <div className="flex gap-[.8rem] text-[.66rem] font-mono mt-[.3rem]" style={{ color: "var(--muted)", fontFamily: "Space Mono, monospace" }}>
+          <div className="flex gap-[.8rem] text-[.66rem] font-mono mt-[.3rem]" style={{ color: "var(--muted)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
             <span>{post.date}</span>
             <span>{post.readTime}</span>
           </div>

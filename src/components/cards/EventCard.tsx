@@ -79,7 +79,7 @@ export default function EventCard({
         {/* Hover overlay text */}
         <motion.div
           className="absolute inset-0 z-[4] flex items-center justify-center text-white font-mono text-xs"
-          style={{ background: "rgba(0,0,0,.52)", fontFamily: "Space Mono, monospace" }}
+          style={{ background: "rgba(0,0,0,.52)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}
           variants={{ rest: { opacity: 0 }, hover: { opacity: 1 } }}
           transition={{ duration: 0.2 }}
         >
@@ -92,14 +92,14 @@ export default function EventCard({
         <div className="flex justify-between items-center mb-[.3rem]">
           <span
             className="text-[.67rem] font-mono"
-            style={{ color: variant === "upcoming" ? "var(--a2)" : "var(--muted)", fontFamily: "Space Mono, monospace" }}
+            style={{ color: variant === "upcoming" ? "var(--a2)" : "var(--muted)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}
           >
             {event.date}
           </span>
           <span
             className="px-[.58rem] py-[.18rem] rounded-full text-[.6rem] font-mono uppercase tracking-wider"
             style={{
-              fontFamily: "Space Mono, monospace",
+              fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
               background: variant === "upcoming"
                 ? "rgba(34,197,94,.12)"
                 : "rgba(136,136,136,.07)",
@@ -111,7 +111,7 @@ export default function EventCard({
         </div>
         <h3
           className="font-bold text-[.95rem] mb-1 leading-tight transition-colors group-hover:[color:var(--a1)]"
-          style={{ fontFamily: "Syne, sans-serif", color: "var(--text)" }}
+          style={{ fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif", color: "var(--text)" }}
         >
           {event.title}
         </h3>

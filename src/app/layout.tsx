@@ -1,26 +1,7 @@
 import type { Metadata } from "next";
-import { Inter, Syne, Space_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-
-const inter = Inter({
-  variable: "--font-inter",
-  weight: ["300", "400", "500", "600", "700"],
-  subsets: ["latin"],
-});
-
-const syne = Syne({
-  variable: "--font-syne",
-  weight: ["400", "600", "700", "800"],
-  subsets: ["latin"],
-});
-
-const spaceMono = Space_Mono({
-  variable: "--font-space-mono",
-  weight: ["400", "700"],
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "SDC INDIA | Student Developers Community",
@@ -39,7 +20,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${syne.variable} ${spaceMono.variable} antialiased`}>
+      <body className="antialiased">
         <Navbar />
         {children}
         <Footer />

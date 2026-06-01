@@ -60,7 +60,7 @@ export default function HighlightCard({
       <div className="flex items-center gap-[.8rem]">
         <motion.div
           className="w-[42px] h-[42px] rounded-full flex items-center justify-center text-white font-extrabold text-[.9rem] flex-shrink-0"
-          style={{ background: highlight.gradient, fontFamily: "Syne, sans-serif" }}
+          style={{ background: highlight.gradient, fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}
           variants={{
             rest: { scale: 1, rotate: 0, boxShadow: "0 0 0 rgba(232,67,147,0)" },
             hover: { scale: 1.12, rotate: 6, boxShadow: "0 8px 22px rgba(232,67,147,.35)" },
@@ -72,14 +72,14 @@ export default function HighlightCard({
         <div>
           <div
             className="font-bold text-[.87rem] group-hover:gtext transition-colors"
-            style={{ fontFamily: "Syne, sans-serif", color: "var(--text)" }}
+            style={{ fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif", color: "var(--text)" }}
           >
             {highlight.team}
           </div>
           <div className="text-[.7rem]" style={{ color: "var(--muted)" }}>
             {highlight.event}
           </div>
-          <div className="text-[.63rem] font-mono mt-[.12rem]" style={{ color: "var(--a3)", fontFamily: "Space Mono, monospace" }}>
+          <div className="text-[.63rem] font-mono mt-[.12rem]" style={{ color: "var(--a3)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
             {highlight.position} place · {highlight.eventDate}
           </div>
         </div>

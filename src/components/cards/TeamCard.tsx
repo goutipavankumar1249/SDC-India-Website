@@ -36,7 +36,7 @@ export default function TeamCard({
     >
       <motion.div
         className="w-16 h-16 rounded-full mx-auto mb-[.85rem] flex items-center justify-center text-white font-extrabold text-[1.2rem]"
-        style={{ background: member.gradient, fontFamily: "Syne, sans-serif" }}
+        style={{ background: member.gradient, fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}
         variants={{
           rest: { scale: 1, rotate: 0 },
           hover: { scale: 1.12, rotate: 6 },
@@ -47,14 +47,14 @@ export default function TeamCard({
       </motion.div>
       <h4
         className="font-bold text-[.9rem] mb-1"
-        style={{ fontFamily: "Syne, sans-serif", color: "var(--text)" }}
+        style={{ fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif", color: "var(--text)" }}
       >
         {member.name}
       </h4>
       <p className="text-[.72rem]" style={{ color: "var(--sub)" }}>{member.role}</p>
       <motion.p
         className="text-[.62rem] font-mono mt-[.55rem]"
-        style={{ color: "var(--muted)", fontFamily: "Space Mono, monospace" }}
+        style={{ color: "var(--muted)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}
         variants={{ rest: { opacity: 0 }, hover: { opacity: 1 } }}
         transition={{ duration: 0.2 }}
       >

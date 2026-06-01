@@ -1,4 +1,4 @@
-export type TeamSection = "Founder" | "Core";
+export type TeamSection = "Founder" | "Board" | "Tech" | "Core" | "Alumni";
 
 export interface TeamMember {
   id: string;

@@ -1,13 +1,18 @@
-import { blogPostsStub } from "@/data/blog";
+import { publicListBlogPosts } from "@/admin/lib/data/blog";
+import { mapRowToBlogPost } from "@/lib/mappers/blog";
 import BlogCard from "@/components/cards/BlogCard";
 
-export default function BlogPage() {
-  const featured = blogPostsStub[0];
-  const rest = blogPostsStub.slice(1);
+export const revalidate = 60;
+
+export default async function BlogPage() {
+  const rows = await publicListBlogPosts();
+  const posts = rows.map(mapRowToBlogPost);
+  const featured = posts[0];
+  const rest = posts.slice(1);
 
   return (
     <main className="pt-32 pb-20">
-      <div className="max-w-[1100px] mx-auto px-6">
+      <div className="max-w-[1280px] mx-auto px-6">
         <div className="sec-label mb-2">// BLOG</div>
         <h1 className="sec-title">Stories, insights & recaps</h1>
         <p className="sec-sub mb-12">Articles, event recaps, and community stories from the Student Developers Community.</p>
@@ -19,6 +24,13 @@ export default function BlogPage() {
             <BlogCard key={p.id} post={p} />
           ))}
         </div>
+
+        {posts.length === 0 && (
+          <div className="rounded-xl p-10 text-center text-[.88rem]"
+               style={{ background: "var(--card)", border: "1px dashed var(--border)", color: "var(--muted)" }}>
+            No blog posts yet. Check back soon!
+          </div>
+        )}
       </div>
     </main>
   );

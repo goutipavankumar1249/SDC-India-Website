@@ -1,60 +1,52 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 
 /* ──────────────────────────────────────
    SDC INDIA — Dark + Pink/Orange/Purple theme
-   Source: sdc-website-old.html design tokens
+   Single font: Helvetica stack site-wide
 ─────────────────────────────────────── */
 :root {
-  /* Surfaces */
   --bg: #080808;
   --surface: #0f0f0f;
   --card: #141414;
   --border: #1e1e1e;
   --border2: #2a2a2a;
 
-  /* Accents */
-  --a1: #e84393;   /* pink */
-  --a2: #f97316;   /* orange */
-  --a3: #a855f7;   /* purple */
+  --a1: #e84393;
+  --a2: #f97316;
+  --a3: #a855f7;
   --grad: linear-gradient(135deg, #e84393 0%, #f97316 50%, #a855f7 100%);
 
-  /* Text */
   --text: #efefef;
   --muted: #555;
   --sub: #888;
 
-  /* Spring easing */
   --spring: cubic-bezier(.34, 1.56, .64, 1);
   --ease-out: cubic-bezier(.22, .61, .36, 1);
+
+  /* The single font for the whole site */
+  --font-helv: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  min-height: 100%;
-}
-
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
 html { scroll-behavior: smooth; }
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-helv);
   overflow-x: hidden;
 }
 
-/* Typography */
-h1, h2, h3, h4, h5, h6, .font-syne {
-  font-family: "Syne", sans-serif;
+/* All headings → Helvetica (overrides Tailwind defaults) */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-helv);
+  letter-spacing: -0.01em;
 }
 
-.font-mono, .font-space-mono {
-  font-family: "Space Mono", monospace;
+/* Form controls + buttons inherit Helvetica */
+input, select, textarea, button {
+  font-family: var(--font-helv);
 }
 
 /* Gradient text helper */
@@ -65,20 +57,21 @@ h1, h2, h3, h4, h5, h6, .font-syne {
   -webkit-text-fill-color: transparent;
 }
 
-/* Section labels */
+/* Section labels (small uppercase tags above headings) */
 .sec-label {
-  font-family: "Space Mono", monospace;
-  font-size: .67rem;
+  font-family: var(--font-helv);
+  font-size: .7rem;
+  font-weight: 600;
   color: var(--a1);
-  letter-spacing: .15em;
+  letter-spacing: .18em;
   text-transform: uppercase;
 }
 
 .sec-title {
-  font-family: "Syne", sans-serif;
+  font-family: var(--font-helv);
   font-size: clamp(1.7rem, 4vw, 2.5rem);
-  font-weight: 800;
-  line-height: 1.1;
+  font-weight: 700;
+  line-height: 1.15;
   letter-spacing: -0.02em;
 }
 
@@ -86,7 +79,7 @@ h1, h2, h3, h4, h5, h6, .font-syne {
   color: var(--sub);
   font-size: .93rem;
   line-height: 1.75;
-  max-width: 560px;
+  max-width: 640px;
   margin-top: .7rem;
 }
 
@@ -95,13 +88,12 @@ h1, h2, h3, h4, h5, h6, .font-syne {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: .78rem 1.8rem;
+  padding: .72rem 1.6rem;
   border-radius: 8px;
   background: var(--grad);
   color: #fff;
-  font-size: .88rem;
+  font-size: .87rem;
   font-weight: 700;
-  font-family: "Syne", sans-serif;
   text-decoration: none;
   cursor: pointer;
   border: none;
@@ -117,14 +109,13 @@ h1, h2, h3, h4, h5, h6, .font-syne {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: .78rem 1.8rem;
+  padding: .72rem 1.6rem;
   border-radius: 8px;
   border: 1px solid var(--border2);
   color: var(--text);
   background: var(--card);
-  font-size: .88rem;
-  font-weight: 700;
-  font-family: "Syne", sans-serif;
+  font-size: .87rem;
+  font-weight: 600;
   text-decoration: none;
   cursor: pointer;
   transition: border-color .2s, background .2s;
@@ -134,21 +125,18 @@ h1, h2, h3, h4, h5, h6, .font-syne {
   background: var(--surface);
 }
 
-/* Card defaults */
 .card-base {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 15px;
 }
 
-/* Divider */
 .hdivider {
   height: 1px;
   background: var(--border);
-  margin: 4.5rem 0;
+  margin: 4rem 0;
 }
 
-/* Pulse */
 .pulse {
   width: 6px;
   height: 6px;
@@ -161,23 +149,11 @@ h1, h2, h3, h4, h5, h6, .font-syne {
   50% { opacity: .3; }
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border2);
-  border-radius: 5px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #3a3a3a;
-}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: #3a3a3a; }
 
-/* Reduce-motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
